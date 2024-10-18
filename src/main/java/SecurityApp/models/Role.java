@@ -18,7 +18,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "Auth")
-public class Auth implements GrantedAuthority {
+public class Role implements GrantedAuthority {
 
     @Id
     @Column(name = "auth_id")
@@ -42,10 +42,10 @@ public class Auth implements GrantedAuthority {
     private Set<User> people = new HashSet<>();
 
 
-    public Auth() {
+    public Role() {
     }
 
-    public Auth(String role) {
+    public Role(String role) {
 
         this.role = role;
     }
@@ -112,7 +112,7 @@ public class Auth implements GrantedAuthority {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Auth auth = (Auth) obj;
+        Role auth = (Role) obj;
         if (auth_id != auth.auth_id) {
             return false;
         }

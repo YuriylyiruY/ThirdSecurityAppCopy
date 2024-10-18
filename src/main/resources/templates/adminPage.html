@@ -43,7 +43,7 @@
             font-size: 25px;
             background-color: lightgrey;
 
-            border:2px solid darkgray;
+            border: 2px solid darkgray;
         }
 
 
@@ -235,7 +235,7 @@
             padding: 0;
             height: 535px;
             position: relative;
-            left:19px;
+            left: 19px;
 
         }
 
@@ -255,7 +255,8 @@
             padding: 0;
 
         }
-        .addNewUserCol12{
+
+        .addNewUserCol12 {
             height: 0;
 
         }
@@ -268,17 +269,27 @@
             height: 458px;
             margin: auto;
             background-color: white;
-            padding-left:360px;
+            padding-left: 360px;
 
         }
 
-/*ALL Users block*/
+        /*ALL Users block*/
         .block2 {
             position: relative;
             top: -535px;
             left: -12px;
             background-color: white;
-            margin-left:19px;
+            margin-left: 19px;
+        }
+
+        .checkbox2 {
+            position: relative;
+            top: 39px;
+            left: 80px;
+        }
+
+        .checkbox3 {
+            width: 10px;
         }
     </style>
 
@@ -423,16 +434,22 @@
                                th:placeholder="password">
                     </div>
 
-                    <div class="mbForm" th:object="${ttt}">
-                        <label class="formLabelSelect1" for="role">Roles</label>
-                        <select class="mbFormInputSelect1 form-select" multiple aria-label="multiple select example"
-                                th:name="role"
-                                id="role">
+                    <div class="mbForm  checkbox2">
 
 
-                            <option th:each="role:${list}" th:value="${role}" th:text="${role}">ADMIN</option>
+                        <div>
+                            <label for="Admin">Admin</label>
 
-                        </select></div>
+
+                            <input id="Admin" type="checkbox" name="Admin" th:checked="${userS.setAdmin(true)}"/>
+
+                            <label for="User">User</label>
+                            <input id="User" type="checkbox" name="User" th:checked="${userS.setUser(true)}"/>
+
+                        </div>
+
+
+                    </div>
 
 
                     <div class="modal-footer footerStyle1">
@@ -450,8 +467,8 @@
 <div class="container-fluid ">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid d-flex justify-content-between">
-            <div th:object="${user}" class="navbar-brand" > admin@mail.ru with roles:  <span th:each="p:${user.getAuths()}"><span th:text="${p.getRole()}"></span> </span></div>
-
+            <div th:object="${user}" class="navbar-brand"> admin@mail.ru with roles: <span
+                    th:each="p:${user.getAuths()}"><span th:text="${p.getRole()}"></span> </span></div>
 
 
             <form class="d-flex btnLogOut" th:action="@{/logout}" th:method="POST">
@@ -529,18 +546,20 @@
                                        class="mbFormInput2 form-control" id="exampleFormControlInput70"
                                        th:placeholder="password">
                             </div>
-                            <div class="mbForm" th:object="${ttt}">
-                                <label class="formLabel" for="role1">Roles</label>
-                                <select class="mbFormInput2Select form-select" multiple
-                                        aria-label="multiple select example"
-                                        th:name="role"
-                                        id="role1">
+
+                            <div class="mbForm checkbox2">
 
 
-                                    <option th:each="role:${list}" th:value="${role}" th:text="${role}">ADMIN
-                                    </option>
+                                <div>
+                                    <label for="Admin">Admin</label>
+                                    <input id="Admin" type="checkbox" name="Admin"
+                                           th:checked="${userS.setAdmin(true)}"/>
+                                    <label for="User">User</label>
+                                    <input id="User" type="checkbox" name="User" th:checked="${userS.setUser(true)}"/>
+                                </div>
 
-                                </select></div>
+
+                            </div>
 
 
                             <div class="modalFooterCreate">
@@ -558,9 +577,9 @@
             <div class="container-fluid collapse  block2 multi-collapse show" id="multiCollapseExample1">
                 <div class="allUsers p-2 ps-4">All users!</div>
                 <div class=" container col-md-12 d-flex flex-row ">
-                   <!-- container col-md-9-->
+                    <!-- container col-md-9-->
                     <table class="table table-striped">
-                        <thead >
+                        <thead>
                         <tr>
                             <th scope="col">ID</th>
                             <th scope="col">First Name</th>

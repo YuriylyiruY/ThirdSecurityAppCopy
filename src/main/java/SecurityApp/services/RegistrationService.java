@@ -1,11 +1,11 @@
 package SecurityApp.services;
 
+import SecurityApp.models.Role;
 import SecurityApp.models.User;
-import SecurityApp.models.Auth;
 
 public interface RegistrationService {
      void makeEncode(User user);
      void registerSuperAdmin(User user);
-     void registerAdmin(User user, Auth auth4);
+     void registerAAdmin(User user, Role auth1, Boolean isAdmin, Boolean isUser);
 
 }

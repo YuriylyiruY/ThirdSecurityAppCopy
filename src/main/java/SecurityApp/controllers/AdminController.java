@@ -1,10 +1,10 @@
 package SecurityApp.controllers;
 
-import SecurityApp.models.Auth;
+import SecurityApp.models.Role;
 import SecurityApp.models.User;
-import SecurityApp.security.PersonDetails;
+import SecurityApp.security.UserDetails;
 import SecurityApp.services.UserService;
-import SecurityApp.services.PersonDetailsService;
+import SecurityApp.services.UserDetailsService;
 import SecurityApp.services.RegistrationService;
 import SecurityApp.services.RoleService;
 import SecurityApp.util.PersonValidator;
@@ -37,7 +37,7 @@ public class AdminController {
 
 
     @Autowired
-    public AdminController(UserService peopleService, PersonValidator personValidator, RegistrationService registrationService, PersonDetailsService personDetailsService, RoleService roleService) {
+    public AdminController(UserService peopleService, PersonValidator personValidator, RegistrationService registrationService, UserDetailsService personDetailsService, RoleService roleService) {
         this.peopleService = peopleService;
         this.personValidator = personValidator;
         this.registrationService = registrationService;
@@ -46,10 +46,10 @@ public class AdminController {
     }
 
     @GetMapping("/adminPage")
-    public String index(Model model, @ModelAttribute("ttt") Auth auth, @ModelAttribute("userS") User user) {
+    public String index(Model model, @ModelAttribute("ttt") Role auth, @ModelAttribute("userS") User user) {
         model.addAttribute("people", peopleService.findAll());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
+        UserDetails personDetails = (UserDetails) authentication.getPrincipal();
 
 
         model.addAttribute("user", personDetails.getPerson());
@@ -69,7 +69,7 @@ public class AdminController {
 
     @GetMapping("/new")
     public String newPerson(@ModelAttribute("person") User user,
-                            @ModelAttribute("ttt") Auth auth,
+                            @ModelAttribute("ttt") Role auth,
                             Model model) {
         List<String> list = Arrays.asList("ADMIN", "USER");
 
@@ -82,7 +82,8 @@ public class AdminController {
 
     @PostMapping("/")
     public String create(@ModelAttribute("person") @Valid User user,
-                         @ModelAttribute("ttt") Auth auth,
+                         // @ModelAttribute("ttt") Auth auth,
+                         Role auth1,
                          BindingResult bindingResult) {
 
         personValidator.validate(user, bindingResult);
@@ -90,11 +91,11 @@ public class AdminController {
             return "new";
         registrationService.makeEncode(user);
         roleService.addRolesToTable(user);
-        System.out.println(auth.getRole());
-        System.out.println(auth.getIdForAuth());
+        //System.out.println(auth.getRole());
+        //System.out.println(auth.getIdForAuth());
         //user.setAuths(auth);
-        registrationService.registerAdmin(user, auth);
-
+        // registrationService.registerAdmin(user, auth);
+        registrationService.registerAAdmin(user, auth1, user.getAdmin(), user.getUser());
         peopleService.save(user);
         return "redirect:/adminPage";
     }
@@ -114,7 +115,7 @@ public class AdminController {
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id, @ModelAttribute("ttt") Auth auth) {
+    public String edit(Model model, @PathVariable("id") int id, @ModelAttribute("ttt") Role auth) {
         model.addAttribute("person", peopleService.findOne(id));
 
         List<String> list = Arrays.asList("ADMIN", "USER");
@@ -125,15 +126,21 @@ public class AdminController {
 
     @PostMapping("/{id}")
     public String update(@ModelAttribute("person") @Valid User user, BindingResult bindingResult,
-                         @ModelAttribute("ttt") Auth auth,
+                         Role auth,
                          HttpServletRequest request) {
         if (bindingResult.hasErrors())
             return "edit";
         int id = Integer.parseInt(request.getParameter("id"));
-        registrationService.registerAdmin(user, auth);
+        registrationService.makeEncode(user);
+        registrationService.registerAAdmin(user, auth, user.getAdmin(), user.getUser());
         peopleService.update(id, user);
         return "redirect:/adminPage";
     }
+//    @PostMapping("/insert")
+//    public String insertExample(Model model, Auth auth) {
+//        model.addAttribute("example", auth);
+//        return "example-form";
+//    }
 
     @PostMapping("/del/{id}")
     public String delete(HttpServletRequest request) {
@@ -146,7 +153,7 @@ public class AdminController {
     @GetMapping("/adminUserPage")
     public String userAdminPage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
+        UserDetails personDetails = (UserDetails) authentication.getPrincipal();
         System.out.println(personDetails.getPerson());
         model.addAttribute("person", personDetails.getPerson());
         return "adminUserPage";

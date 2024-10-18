@@ -1,6 +1,6 @@
 package SecurityApp.controllers;
 
-import SecurityApp.models.Auth;
+import SecurityApp.models.Role;
 import SecurityApp.models.User;
 import SecurityApp.services.RegistrationService;
 import SecurityApp.services.RoleService;
@@ -41,26 +41,31 @@ public class AuthController {
     }
 
     @GetMapping("/registration")
-    public String registrationPage(@ModelAttribute("person") User user, @ModelAttribute("ttt") Auth role, Model model) {
-        List<String> list = Arrays.asList("ADMIN", "USER");
+    public String registrationPage(@ModelAttribute("person") User user, @ModelAttribute("ttt") Role roles, Model model) {
+//        List<String> list = Arrays.asList("ROLE_ADMIN", "ROLE_USER");
+//
+//        model.addAttribute("list", list);
 
-        model.addAttribute("list", list);
         return "registration";
     }
 
     @PostMapping("/registration")
     public String performRegistration(@ModelAttribute("person") @Valid User user,
-                                      BindingResult bindingResult, Auth role) {
+                                      BindingResult bindingResult, Role roles) {
         personValidator.validate(user, bindingResult);
 
-        if (bindingResult.hasErrors())
+        if (bindingResult.hasErrors()) {
             return "registration";
+        }
+
+
         registrationService.makeEncode(user);
         roleService.addRolesToTable(user);
 
 
         //user.setAuths(auth);
-        registrationService.registerAdmin(user, role);
+        // registrationService.registerAdmin(user, role);
+        registrationService.registerAAdmin(user, roles, user.getAdmin(), user.getUser());
         return "redirect:/auth/login";
     }
 }

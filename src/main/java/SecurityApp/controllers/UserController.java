@@ -1,6 +1,6 @@
 package SecurityApp.controllers;
 
-import SecurityApp.security.PersonDetails;
+import SecurityApp.security.UserDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -12,15 +12,16 @@ public class UserController {
     @GetMapping("/userPage")
     public String userPage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
+        UserDetails personDetails = (UserDetails) authentication.getPrincipal();
         System.out.println(personDetails.getPerson());
         model.addAttribute("person", personDetails.getPerson());
         return "userPage";
     }
+
     @GetMapping("/showUserInfo")
     public String showUserInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
+        UserDetails personDetails = (UserDetails) authentication.getPrincipal();
         System.out.println(personDetails.getPerson());
 
         return "hello";

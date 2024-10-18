@@ -24,14 +24,16 @@
     <input type="text" th:field="*{age}" id="age"/>
     <div style="color:red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age Error</div>
     <br/>
-    <div th:object="${ttt}">
-        <label for="role">Roles</label>
-        <select th:field="*{role}" id="role">
+    <div>
+        <label for="Admin">Admin</label>
 
 
-            <option th:each="role:${list}" th:value="${role}" th:text="${role}">ADMIN</option>
-
-        </select></div>
+        <input  id="Admin" type="checkbox" name="Admin" th:checked="${person.setAdmin(true)}" />
+        <div style="color:red" th:if="${#fields.hasErrors('Admin')}" th:errors="${person.setAdmin(true)}">Name Error</div>
+        <label for="User">User</label>
+        <input  id="User" type="checkbox" name="User" th:checked="${person.setUser(true)}" />
+        <div style="color:red" th:if="${#fields.hasErrors('User')}" th:errors="${person.setAdmin(true)}">Name Error</div>
+    </div>
     <label for="email">Enter email: </label>
     <input type="text" th:field="*{email}" id="email"/>
     <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>

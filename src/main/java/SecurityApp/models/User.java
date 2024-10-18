@@ -40,20 +40,39 @@ public class User {
     private String password;
 
 
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinTable(
             name = "Person_Auth"
             , joinColumns = @JoinColumn(name = "for_person_id")
             , inverseJoinColumns = @JoinColumn(name = "for_auth_id")
     )
-    private Set<Auth> auths = new HashSet<>();
+    private Set<Role> auths = new HashSet<>();
 
+    private Boolean User = false;
+
+    private Boolean Admin = false;
+
+    public Boolean getUser() {
+        return User;
+    }
+
+    public void setUser(Boolean user) {
+        User = user;
+    }
+
+    public Boolean getAdmin() {
+        return Admin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        Admin = admin;
+    }
 
     // Конструктор по умолчанию нужен для Spring
     public User() {
     }
 
-    public User(String name, String lastName, int age, String email, String password, Set<Auth> auths) {
+    public User(String name, String lastName, int age, String email, String password, Set<Role> auths) {
         this.name = name;
         this.lastName = lastName;
         this.age = age;
@@ -70,17 +89,15 @@ public class User {
         this.lastName = lastName;
     }
 
-    public Set<Auth> getAuths() {
+    public Set<Role> getAuths() {
         return auths;
     }
 
 
-    public void setAuths(Auth auth) {
+    public void setAuths(Role auth) {
         auths.add(auth);
 
     }
-
-
 
 
     @Min(value = 0, message = "Age should be greater than 0")

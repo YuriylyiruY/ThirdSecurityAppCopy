@@ -1,6 +1,6 @@
 package SecurityApp.config;
 
-import SecurityApp.services.PersonDetailsService;
+import SecurityApp.services.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -17,10 +17,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
-    private final PersonDetailsService personDetailsService;
+    private final UserDetailsService personDetailsService;
 
     @Autowired
-    public SecurityConfig(PersonDetailsService personDetailsService) {
+    public SecurityConfig(UserDetailsService personDetailsService) {
         this.personDetailsService = personDetailsService;
     }
 

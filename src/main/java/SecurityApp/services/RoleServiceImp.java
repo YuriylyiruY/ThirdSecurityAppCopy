@@ -1,9 +1,8 @@
 package SecurityApp.services;
 
+import SecurityApp.models.Role;
 import SecurityApp.models.User;
-import SecurityApp.models.Auth;
 import SecurityApp.repositories.RoleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +13,7 @@ import java.util.Optional;
 @Service
 @Transactional
 public class RoleServiceImp implements RoleService {
-    @Autowired
+
     private final RoleRepository authRepository;
 
     public RoleServiceImp(RoleRepository authRepository) {
@@ -23,8 +22,8 @@ public class RoleServiceImp implements RoleService {
 
 
     public void addRolesToTable(User user) {
-        Auth auth = new Auth("ROLE_USER");
-        Auth auth2 = new Auth("ROLE_ADMIN");
+        Role auth = new Role("ROLE_USER");
+        Role auth2 = new Role("ROLE_ADMIN");
 
         if (findByRole("ROLE_USER")) {
             authRepository.save(auth);
@@ -35,11 +34,24 @@ public class RoleServiceImp implements RoleService {
             user.setAuths(auth2);
         }
     }
-
+@Transactional(readOnly = true)
     public boolean findByRole(String s) throws UsernameNotFoundException {
-        Optional<Auth> auth = authRepository.findByRole(s);
+        Optional<Role> auth = authRepository.findByRole(s);
 
         return auth.isEmpty();
 
     }
+
+    @Transactional
+    public Role findRole(String s) throws RuntimeException {
+        Optional<Role> auth = authRepository.findByRole(s);
+        if (auth.isEmpty()) {
+            throw new RuntimeException("Auth not found!");
+        }
+        return auth.get();
+
+
+    }
+
+
 }

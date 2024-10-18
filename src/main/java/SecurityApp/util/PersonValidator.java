@@ -6,16 +6,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import SecurityApp.models.User;
-import SecurityApp.services.PersonDetailsService;
+import SecurityApp.services.UserDetailsService;
 
 
 @Component
 public class PersonValidator implements Validator {
 
-    private final PersonDetailsService personDetailsService;
+    private final UserDetailsService personDetailsService;
 
     @Autowired
-    public PersonValidator(PersonDetailsService personDetailsService) {
+    public PersonValidator(UserDetailsService personDetailsService) {
         this.personDetailsService = personDetailsService;
     }
 

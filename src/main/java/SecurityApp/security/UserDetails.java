@@ -1,27 +1,26 @@
 package SecurityApp.security;
 
+import SecurityApp.models.Role;
 import SecurityApp.models.User;
-import SecurityApp.models.Auth;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 
-public class PersonDetails implements UserDetails {
+public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
     private final User person;
 
-    public PersonDetails(User user) {
+    public UserDetails(User user) {
         this.person = user;
 
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<Auth> auths = person.getAuths();
+        Set<Role> auths = person.getAuths();
         return auths.stream().map(r -> new SimpleGrantedAuthority(r.getAuthority())).collect(Collectors.toSet());
     }
 
